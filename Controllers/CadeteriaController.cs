@@ -42,7 +42,7 @@ public class CadeteriaController : ControllerBase
     [HttpGet("InformeJornada")]
     public ActionResult<string> GetInforme()
     {
-        string informeJson = informe.GenerarInforme(ref cadeteria);
+        string informeJson = informe.GenerarInforme(cadeteria);
         return Ok(informeJson);
     }
 

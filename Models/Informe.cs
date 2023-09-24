@@ -3,7 +3,7 @@ using WebAPI;
 
 public class InformeCadete
 {
-   
+
     int idCadete;
     string nombreCadete;
     private int cantidadPedidosRecibidos;
@@ -15,7 +15,8 @@ public class InformeCadete
     public string NombreCadete { get => nombreCadete; set => nombreCadete = value; }
     public int CantidadPedidosRecibidos { get => cantidadPedidosRecibidos; set => cantidadPedidosRecibidos = value; }
     public int CantidadPedidosEntregados { get => cantidadPedidosEntregados; set => cantidadPedidosEntregados = value; }
-    public int PromedioPedidosEntregados { get => promedioPedidosEntregados; set => promedioPedidosEntregados = value; }
+    public int PromedioPedidosEntregados { get => promedioPedidosEntregados;
+     set => promedioPedidosEntregados = value; }
     public double MontoGanado { get => montoGanado; set => montoGanado = value; }
 }
 
@@ -25,31 +26,36 @@ public class Informe
 
     public Informe() => informes = new List<InformeCadete>();
 
-    
+
     private List<InformeCadete> CargarInforme(Cadeteria cadeteria)
     {
         
-        foreach (var pedido in cadeteria.GetPedidos())
+        foreach (var cadete in cadeteria.GetCadetes())
         {
-            var InformeIndividual = new InformeCadete();
-            InformeIndividual.IdCadete = pedido.Cadete.Id;
-            InformeIndividual.NombreCadete = pedido.Cadete.Nombre;
-            InformeIndividual.CantidadPedidosRecibidos = cadeteria.CantidadPedidosAsignados(InformeIndividual.IdCadete);
-            InformeIndividual.CantidadPedidosEntregados = cadeteria.CantidadPedidosEntregados(InformeIndividual.IdCadete);
+            var InformeIndividual = new InformeCadete
+            {
+                IdCadete = cadete.Id,
+                NombreCadete = cadete.Nombre,
+                CantidadPedidosRecibidos = cadeteria.CantidadPedidosAsignados(cadete.Id),
+                CantidadPedidosEntregados = cadeteria.CantidadPedidosEntregados(cadete.Id),
+                MontoGanado = cadeteria.JornalACobrar(cadete.Id)
+            };
+
             if (InformeIndividual.CantidadPedidosRecibidos > 0)
             {
-                InformeIndividual.PromedioPedidosEntregados = InformeIndividual.CantidadPedidosEntregados/InformeIndividual.CantidadPedidosRecibidos;
-            }else
+                InformeIndividual.PromedioPedidosEntregados = InformeIndividual.CantidadPedidosEntregados / InformeIndividual.CantidadPedidosRecibidos;
+            }
+            else
             {
                 InformeIndividual.CantidadPedidosRecibidos = 0;
             }
-            InformeIndividual.MontoGanado = cadeteria.JornalACobrar(InformeIndividual.IdCadete);
 
             informes.Add(InformeIndividual);
         }
-        return informes;    
+
+        return informes;
     }
-    public string GenerarInforme(ref Cadeteria cadeteria)
+    public string GenerarInforme(Cadeteria cadeteria)//consultar si pasar por ref o no
     {
         var informes = CargarInforme(cadeteria);
         return JsonSerializer.Serialize(informes);

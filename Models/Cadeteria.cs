@@ -38,16 +38,16 @@ public List<Pedido> Pedidos { get => _pedidos;}*/
         _cadetes.Add(new Cadete(2, "Dean Winchester", "dakota del norte", 321654));
         _cadetes.Add(new Cadete(3, "Jhon Winchester", "Dakota del norte", 789456));
 
-        _pedidos.Add(new Pedido(1, "este es pedido 1", 1));
-        _pedidos.Add(new Pedido(2, "este es pedido 2", 1));
-        _pedidos.Add(new Pedido(3, "este es pedido 3", 1));
-        _pedidos.Add(new Pedido(4, "este es pedido 4", 1));
-        _pedidos.Add(new Pedido(5, "este es pedido 5", 1));
-        _pedidos.Add(new Pedido(6, "este es pedido 6", 1));
-        _pedidos.Add(new Pedido(7, "este es pedido 7", 1));
+        _pedidos.Add(new Pedido(1, "este es pedido 1", 0));
+        _pedidos.Add(new Pedido(2, "este es pedido 2", 0));
+        _pedidos.Add(new Pedido(3, "este es pedido 3", 0));
+        _pedidos.Add(new Pedido(4, "este es pedido 4", 0));
+        _pedidos.Add(new Pedido(5, "este es pedido 5", 0));
+        _pedidos.Add(new Pedido(6, "este es pedido 6", 0));
+        _pedidos.Add(new Pedido(7, "este es pedido 7", 0));
+        _pedidos.Add(new Pedido(8, "este es pedido 8", 0));
+        _pedidos.Add(new Pedido(9, "este es pedido 8", 0));
     }
-
-
 
     public List<Pedido> GetPedidos()
     {
@@ -104,7 +104,7 @@ public List<Pedido> Pedidos { get => _pedidos;}*/
         int cantidadPedidosAsignados = 0;
         foreach (var pedido in _pedidos)
         {
-            if (pedido.Cadete.Id == idCadete)
+            if (pedido.Cadete != null && pedido.Cadete.Id == idCadete)
             {
                 cantidadPedidosAsignados++;
             }
@@ -116,7 +116,7 @@ public List<Pedido> Pedidos { get => _pedidos;}*/
         int cantEntregados = 0;
         foreach (var pedido in _pedidos)
         {
-            if (pedido.Estado == EstadoPedido.Entregado)
+            if (pedido.Cadete != null && pedido.Estado == EstadoPedido.Entregado)
             {
                 cantEntregados++;
             }
@@ -135,15 +135,11 @@ public List<Pedido> Pedidos { get => _pedidos;}*/
 
         foreach (var pedido in _pedidos)
         {
-            if (pedido.Estado==EstadoPedido.Entregado && pedido.Cadete.Id == idCadete)
+            if (pedido.Cadete != null && pedido.Cadete.Id == idCadete && pedido.Estado==EstadoPedido.Entregado )
             {
                 cantPedidos++;
             }
         }
         return cantPedidos;
     }
-
-
-
-
 }
