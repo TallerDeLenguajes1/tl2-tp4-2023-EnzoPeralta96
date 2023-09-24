@@ -1,52 +1,33 @@
+using System.Security.AccessControl;
+
 namespace WebAPI;
 
 public class Cadeteria
 {
     private const int PRECIO_ENVIO = 500;
-    private static Cadeteria cadeteria;
-
-    public static Cadeteria GetCadeteria()
-    {
-        if (cadeteria == null)
-        {
-            cadeteria = new Cadeteria();
-        }
-        return cadeteria;
-    }
-
     private string _nombre;
     private double _telefono;
     private List<Cadete> _cadetes;
-
-    private List<Pedido> _pedidos;
-
-    public string Nombre { get => _nombre; }
-    public double Telefono { get => _telefono; }
-    public List<Pedido> Pedidos { get => _pedidos;}
-
-    /*public List<Cadete> Cadetes { get => _cadetes;}
-public List<Pedido> Pedidos { get => _pedidos;}*/
-
+    private List<Pedido> _pedidos ;
+    private AccesoADatosPedidos accesoADatosPedidos;
+    
+    public string Nombre { get => _nombre; set => _nombre = value; }
+    public double Telefono { get => _telefono; set => _telefono = value; }
+    public List<Cadete> Cadetes { get => _cadetes; set => _cadetes = value; }
+    public List<Pedido> Pedidos { get => _pedidos; set => _pedidos = value; }
+    public AccesoADatosPedidos AccesoADatosPedidos { get => accesoADatosPedidos; set => accesoADatosPedidos = value; }
+  
     public Cadeteria()
     {
-        _nombre = "FlashCadeteria";
-        _telefono = 3813110011;
         _cadetes = new List<Cadete>();
         _pedidos = new List<Pedido>();
-
-        _cadetes.Add(new Cadete(1, "Sam Winchester", "dakota del norte", 123456));
-        _cadetes.Add(new Cadete(2, "Dean Winchester", "dakota del norte", 321654));
-        _cadetes.Add(new Cadete(3, "Jhon Winchester", "Dakota del norte", 789456));
-
-        _pedidos.Add(new Pedido(1, "este es pedido 1", 0));
-        _pedidos.Add(new Pedido(2, "este es pedido 2", 0));
-        _pedidos.Add(new Pedido(3, "este es pedido 3", 0));
-        _pedidos.Add(new Pedido(4, "este es pedido 4", 0));
-        _pedidos.Add(new Pedido(5, "este es pedido 5", 0));
-        _pedidos.Add(new Pedido(6, "este es pedido 6", 0));
-        _pedidos.Add(new Pedido(7, "este es pedido 7", 0));
-        _pedidos.Add(new Pedido(8, "este es pedido 8", 0));
-        _pedidos.Add(new Pedido(9, "este es pedido 8", 0));
+    }
+    public Cadeteria(string nombre, double tel)
+    {
+        Nombre = nombre;
+        Telefono = tel;
+        Pedidos = new List<Pedido>();
+        Cadetes = new List<Cadete>();
     }
 
     public List<Pedido> GetPedidos()
@@ -63,6 +44,7 @@ public List<Pedido> Pedidos { get => _pedidos;}*/
     {
         _pedidos.Add(nuevoPedido);
         nuevoPedido.NroPedido = _pedidos.Count();
+        AccesoADatosPedidos.Guardar(_pedidos);
         return nuevoPedido;
     }
 
@@ -73,7 +55,9 @@ public List<Pedido> Pedidos { get => _pedidos;}*/
         if (pedido != null && cadete != null)
         {
             pedido.Cadete = cadete;
+            AccesoADatosPedidos.Guardar(_pedidos);
         }
+
         return pedido;
     }
 
@@ -84,6 +68,7 @@ public List<Pedido> Pedidos { get => _pedidos;}*/
         if (pedido != null)
         {
             pedido.Estado = (EstadoPedido)NuevoEstado;
+            AccesoADatosPedidos.Guardar(_pedidos);
         }
         return pedido;
     }
@@ -95,6 +80,7 @@ public List<Pedido> Pedidos { get => _pedidos;}*/
         if (pedido != null && nuevoCadete != null)
         {
             pedido.Cadete = nuevoCadete;
+            AccesoADatosPedidos.Guardar(_pedidos);
         }
         return pedido;
     }

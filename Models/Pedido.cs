@@ -13,7 +13,7 @@ public class Pedido
     private string observacionPedido;
 
     private EstadoPedido estado;
-   // private Cliente cliente;
+   
     private Cadete cadete;
 
     public int NroPedido { get => nroPedido; set => nroPedido = value;}

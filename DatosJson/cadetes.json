@@ -1,0 +1,32 @@
+[
+    {
+        "Id": 1,
+        "Nombre": "Juan Pérez",
+        "Direccion": "Av. Santa Fe 1234, Buenos Aires",
+        "Telefono": 1123456789
+    },
+    {
+        "Id": 2,
+        "Nombre": "María García",
+        "Direccion": "Calle Corrientes 5678, Buenos Aires",
+        "Telefono": 1134567890
+    },
+    {
+        "Id": 3,
+        "Nombre": "Pedro López",
+        "Direccion": "Avenida de Mayo 9012, Buenos Aires",
+        "Telefono": 1145678901
+    },
+    {
+        "Id": 4,
+        "Nombre": "Ana Rodríguez",
+        "Direccion": "Ruta 9 Km 123, Buenos Aires",
+        "Telefono": 1156789012
+    },
+    {
+        "Id": 5,
+        "Nombre": "José Gómez",
+        "Direccion": "Calle 123, Ciudad de México",
+        "Telefono": 5567890123
+    }
+]

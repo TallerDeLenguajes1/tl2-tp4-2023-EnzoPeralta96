@@ -6,15 +6,25 @@ namespace tl2_tp4_2023_EnzoPeralta96.Controllers;
 [Route("[controller]")]
 public class CadeteriaController : ControllerBase
 {
-    private Cadeteria cadeteria;
-    private Informe informe;
+   
+    private readonly Cadeteria cadeteria;
+
+    private AccesoADatosCadetes accesoADatosCadetes;
+    private AccesoADatosPedidos accesoADatosPedidos;
+    private readonly Informe informe;
     private readonly ILogger<CadeteriaController> _logger;
+    
 
     public CadeteriaController(ILogger<CadeteriaController> logger)
     {
         _logger = logger;
-        cadeteria = Cadeteria.GetCadeteria();
-        informe = new Informe();
+        cadeteria = AccesoADatosCadeteria.Obtener();
+        accesoADatosCadetes = new AccesoADatosCadetes();
+        accesoADatosPedidos = new AccesoADatosPedidos();
+        cadeteria.AccesoADatosPedidos = accesoADatosPedidos;
+        cadeteria.Cadetes = accesoADatosCadetes.Obtener();
+        cadeteria.Pedidos = accesoADatosPedidos.Obtener();
+       
     }
 
     [HttpGet]
@@ -42,6 +52,7 @@ public class CadeteriaController : ControllerBase
     [HttpGet("InformeJornada")]
     public ActionResult<string> GetInforme()
     {
+        var informe = new Informe();
         string informeJson = informe.GenerarInforme(cadeteria);
         return Ok(informeJson);
     }
