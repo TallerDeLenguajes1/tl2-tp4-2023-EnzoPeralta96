@@ -14,7 +14,7 @@ public class CadeteriaController : ControllerBase
     {
         _logger = logger;
         cadeteria = Cadeteria.GetCadeteria();
-        informe = new Informe();
+        
     }
 
     [HttpGet]
@@ -42,7 +42,8 @@ public class CadeteriaController : ControllerBase
     [HttpGet("InformeJornada")]
     public ActionResult<string> GetInforme()
     {
-        string informeJson = informe.GenerarInforme(cadeteria);
+        informe = new Informe();
+        string informeJson = informe.GenerarInformeJson(cadeteria);
         return Ok(informeJson);
     }
 

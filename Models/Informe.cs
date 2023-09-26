@@ -1,6 +1,5 @@
 using System.Text.Json;
 using WebAPI;
-
 public class InformeCadete
 {
 
@@ -24,7 +23,10 @@ public class Informe
 {
     List<InformeCadete> informes;
 
-    public Informe() => informes = new List<InformeCadete>();
+    public Informe()
+    {
+        informes = new List<InformeCadete>();
+    } 
 
 
     private List<InformeCadete> CargarInforme(Cadeteria cadeteria)
@@ -32,7 +34,7 @@ public class Informe
         
         foreach (var cadete in cadeteria.GetCadetes())
         {
-            var InformeIndividual = new InformeCadete
+            var informe = new InformeCadete
             {
                 IdCadete = cadete.Id,
                 NombreCadete = cadete.Nombre,
@@ -41,21 +43,17 @@ public class Informe
                 MontoGanado = cadeteria.JornalACobrar(cadete.Id)
             };
 
-            if (InformeIndividual.CantidadPedidosRecibidos > 0)
+            if (informe.CantidadPedidosRecibidos > 0)
             {
-                InformeIndividual.PromedioPedidosEntregados = InformeIndividual.CantidadPedidosEntregados / InformeIndividual.CantidadPedidosRecibidos;
+                informe.PromedioPedidosEntregados = informe.CantidadPedidosEntregados / informe.CantidadPedidosRecibidos; // encapsular
             }
-            else
-            {
-                InformeIndividual.CantidadPedidosRecibidos = 0;
-            }
-
-            informes.Add(InformeIndividual);
+            
+            informes.Add(informe);
         }
 
         return informes;
     }
-    public string GenerarInforme(Cadeteria cadeteria)//consultar si pasar por ref o no
+    public string GenerarInformeJson(Cadeteria cadeteria)//consultar si pasar por ref o no
     {
         var informes = CargarInforme(cadeteria);
         return JsonSerializer.Serialize(informes);

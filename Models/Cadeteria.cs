@@ -111,7 +111,7 @@ public List<Pedido> Pedidos { get => _pedidos;}*/
         }
         return cantidadPedidosAsignados;
     }
-    public int CantidadPedidosEntregados()
+    /*public int CantidadPedidosEntregados()
     {
         int cantEntregados = 0;
         foreach (var pedido in _pedidos)
@@ -122,7 +122,7 @@ public List<Pedido> Pedidos { get => _pedidos;}*/
             }
         }
         return cantEntregados;
-    }
+    }*/
 
     public double JornalACobrar(int idCadete)
     {
