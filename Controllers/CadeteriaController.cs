@@ -24,7 +24,6 @@ public class CadeteriaController : ControllerBase
         cadeteria.AccesoADatosPedidos = accesoADatosPedidos;
         cadeteria.Cadetes = accesoADatosCadetes.Obtener();
         cadeteria.Pedidos = accesoADatosPedidos.Obtener();
-       
     }
 
     [HttpGet]
@@ -53,7 +52,7 @@ public class CadeteriaController : ControllerBase
     public ActionResult<string> GetInforme()
     {
         var informe = new Informe();
-        string informeJson = informe.GenerarInforme(cadeteria);
+        string informeJson = informe.GenerarInformeJson(cadeteria);
         return Ok(informeJson);
     }
 

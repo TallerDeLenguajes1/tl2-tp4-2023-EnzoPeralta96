@@ -97,18 +97,7 @@ public class Cadeteria
         }
         return cantidadPedidosAsignados;
     }
-    public int CantidadPedidosEntregados()
-    {
-        int cantEntregados = 0;
-        foreach (var pedido in _pedidos)
-        {
-            if (pedido.Cadete != null && pedido.Estado == EstadoPedido.Entregado)
-            {
-                cantEntregados++;
-            }
-        }
-        return cantEntregados;
-    }
+  
 
     public double JornalACobrar(int idCadete)
     {

@@ -55,7 +55,7 @@ public class Informe
 
         return informes;
     }
-    public string GenerarInforme(Cadeteria cadeteria)//consultar si pasar por ref o no
+    public string GenerarInformeJson(Cadeteria cadeteria)//consultar si pasar por ref o no
     {
         var informes = CargarInforme(cadeteria);
         return JsonSerializer.Serialize(informes);
