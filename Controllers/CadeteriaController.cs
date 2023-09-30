@@ -16,13 +16,7 @@ public class CadeteriaController : ControllerBase
         _logger = logger;
         cadeteria = Cadeteria.GetCadeteria();
     }
-
-    [HttpGet]
-    public ActionResult<string> GetNombreCadeteria()
-    {
-        return Ok(cadeteria.Nombre);
-    }
-
+    
     [HttpGet]
     [Route("Pedidos")]
     public ActionResult<List<Pedido>> GetPedidos()

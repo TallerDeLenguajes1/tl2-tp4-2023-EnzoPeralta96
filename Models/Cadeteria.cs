@@ -7,11 +7,12 @@ public class Cadeteria
     private const int PRECIO_ENVIO = 500;
     private string _nombre;
     private double _telefono;
-    private List<Cadete> _cadetes;
-    private List<Pedido> _pedidos;
     private AccesoADatosPedidos accesoADatosPedidos;
     private AccesoADatosCadetes accesoADatosCadetes;
     private static Cadeteria _cadeteria;
+
+    public string Nombre { get => _nombre; set => _nombre = value; }
+    public double Telefono { get => _telefono; set => _telefono = value; }
     public static Cadeteria GetCadeteria()
     {
         if (_cadeteria == null)
@@ -20,83 +21,71 @@ public class Cadeteria
             _cadeteria = AccesoADatosCadeteria.Obtener();
             _cadeteria.accesoADatosCadetes = new AccesoADatosCadetes();
             _cadeteria.accesoADatosPedidos = new AccesoADatosPedidos();
-            _cadeteria.CargarPedidos();
-            _cadeteria.CargarCadetes();
         }
         return _cadeteria;
     }
-
-    private void CargarPedidos()
-    {
-        _pedidos = accesoADatosPedidos.Obtener();
-    }
-
-    private void CargarCadetes()
-    {
-        _cadetes = accesoADatosCadetes.Obtener();
-    }
-
-    public string Nombre { get => _nombre; set => _nombre = value; }
-    public double Telefono { get => _telefono; set => _telefono = value; }
-
-
+   
     public Cadeteria()
     {
-        _cadetes = new List<Cadete>();
-        _pedidos = new List<Pedido>();
     }
    
     public List<Pedido> GetPedidos()
     {   
-        return _pedidos;
+        return accesoADatosPedidos.Obtener();
     }
 
     public List<Cadete> GetCadetes()
     {
-        return _cadetes;
+        return accesoADatosCadetes.Obtener();
     }
 
     public Pedido AgregarPedido(Pedido nuevoPedido)
     {
-        _pedidos.Add(nuevoPedido);
-        nuevoPedido.NroPedido = _pedidos.Count();
-        accesoADatosPedidos.Guardar(_pedidos);
+        var pedidos = accesoADatosPedidos.Obtener();
+        pedidos.Add(nuevoPedido);
+        nuevoPedido.NroPedido = pedidos.Count();
+        accesoADatosPedidos.Guardar(pedidos);
         return nuevoPedido;
     }
 
     public Pedido AsignarCadetePedido(int NroPedido, int IdCadete)
     {
-        var pedido = _pedidos.FirstOrDefault(pedido => pedido.NroPedido == NroPedido);
-        var cadete = _cadetes.FirstOrDefault(cadete => cadete.Id == IdCadete);
+        var pedidos = accesoADatosPedidos.Obtener();
+        var cadetes = accesoADatosCadetes.Obtener();
+        var pedido = pedidos.FirstOrDefault(pedido => pedido.NroPedido == NroPedido);
+        var cadete = cadetes.FirstOrDefault(cadete => cadete.Id == IdCadete);
         if (pedido != null && cadete != null)
         {
             pedido.Cadete = cadete;
-            accesoADatosPedidos.Guardar(_pedidos);
+            pedidos.Add(pedido);
+            accesoADatosPedidos.Guardar(pedidos);
         }
-
         return pedido;
     }
 
     public Pedido CambiarEstadoPedido(int idPedido, int NuevoEstado)
     {
-
-        var pedido = _pedidos.FirstOrDefault(pedido => pedido.NroPedido == idPedido);
+        var pedidos = accesoADatosPedidos.Obtener();
+        var pedido = pedidos.FirstOrDefault(pedido => pedido.NroPedido == idPedido);
         if (pedido != null)
         {
             pedido.Estado = (EstadoPedido)NuevoEstado;
-            accesoADatosPedidos.Guardar(_pedidos);
+            pedidos.Add(pedido);
+            accesoADatosPedidos.Guardar(pedidos);
         }
         return pedido;
     }
 
     public Pedido CambiarCadetePedido(int idPedido, int idNuevoCadete)
     {
-        var pedido = _pedidos.FirstOrDefault(pedido => pedido.NroPedido == idPedido);
-        var nuevoCadete = _cadetes.FirstOrDefault(cadete => cadete.Id == idNuevoCadete);
+        var pedidos = accesoADatosPedidos.Obtener();
+        var cadetes = accesoADatosCadetes.Obtener();
+        var pedido = pedidos.FirstOrDefault(pedido => pedido.NroPedido == idPedido);
+        var nuevoCadete = cadetes.FirstOrDefault(cadete => cadete.Id == idNuevoCadete);
         if (pedido != null && nuevoCadete != null)
         {
             pedido.Cadete = nuevoCadete;
-            accesoADatosPedidos.Guardar(_pedidos);
+            accesoADatosPedidos.Guardar(pedidos);
         }
         return pedido;
     }
@@ -104,7 +93,7 @@ public class Cadeteria
     public int CantidadPedidosAsignados(int idCadete)
     {
         int cantidadPedidosAsignados = 0;
-        foreach (var pedido in _pedidos)
+        foreach (var pedido in accesoADatosPedidos.Obtener())
         {
             if (pedido.Cadete != null && pedido.Cadete.Id == idCadete)
             {
@@ -124,7 +113,7 @@ public class Cadeteria
     {
         int cantPedidos = 0;
 
-        foreach (var pedido in _pedidos)
+        foreach (var pedido in accesoADatosPedidos.Obtener())
         {
             if (pedido.Cadete != null && pedido.Cadete.Id == idCadete && pedido.Estado == EstadoPedido.Entregado)
             {
