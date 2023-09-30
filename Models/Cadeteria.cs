@@ -51,56 +51,45 @@ public class Cadeteria
     public Pedido AsignarCadetePedido(int NroPedido, int IdCadete)
     {
         var pedidos = accesoADatosPedidos.Obtener();
-        var cadetes = accesoADatosCadetes.Obtener();
-        var pedido = pedidos.FirstOrDefault(pedido => pedido.NroPedido == NroPedido);
-        var cadete = cadetes.FirstOrDefault(cadete => cadete.Id == IdCadete);
-        if (pedido != null && cadete != null)
+        var cadete = accesoADatosCadetes.Obtener().FirstOrDefault(cadete => cadete.Id == IdCadete);
+        int indexPedido = pedidos.FindIndex(pedido => pedido.NroPedido == NroPedido);
+        if (indexPedido != -1 && cadete != null)
         {
-            pedido.Cadete = cadete;
-            pedidos.Add(pedido);
+            pedidos[indexPedido].Cadete = cadete;
             accesoADatosPedidos.Guardar(pedidos);
         }
-        return pedido;
+        return pedidos[indexPedido];
     }
 
-    public Pedido CambiarEstadoPedido(int idPedido, int NuevoEstado)
+
+    public Pedido CambiarEstadoPedido(int NroPedido, int NuevoEstado)
     {
         var pedidos = accesoADatosPedidos.Obtener();
-        var pedido = pedidos.FirstOrDefault(pedido => pedido.NroPedido == idPedido);
-        if (pedido != null)
+        int indexPedido = pedidos.FindIndex(pedido => pedido.NroPedido == NroPedido);
+        if (indexPedido != -1)
         {
-            pedido.Estado = (EstadoPedido)NuevoEstado;
-            pedidos.Add(pedido);
+            pedidos[indexPedido].Estado = (EstadoPedido)NuevoEstado;
             accesoADatosPedidos.Guardar(pedidos);
         }
-        return pedido;
+        return pedidos[indexPedido];
     }
 
-    public Pedido CambiarCadetePedido(int idPedido, int idNuevoCadete)
+    public Pedido CambiarCadetePedido(int NroPedido, int idNuevoCadete)
     {
         var pedidos = accesoADatosPedidos.Obtener();
-        var cadetes = accesoADatosCadetes.Obtener();
-        var pedido = pedidos.FirstOrDefault(pedido => pedido.NroPedido == idPedido);
-        var nuevoCadete = cadetes.FirstOrDefault(cadete => cadete.Id == idNuevoCadete);
-        if (pedido != null && nuevoCadete != null)
+        var nuevoCadete = accesoADatosCadetes.Obtener().FirstOrDefault(cadete => cadete.Id == idNuevoCadete);
+        var indexPedido = pedidos.FindLastIndex(pedido => pedido.NroPedido == NroPedido);
+        if (indexPedido != -1 && nuevoCadete != null)
         {
-            pedido.Cadete = nuevoCadete;
+            pedidos[indexPedido].Cadete = nuevoCadete;
             accesoADatosPedidos.Guardar(pedidos);
         }
-        return pedido;
+        return pedidos[indexPedido];
     }
 
     public int CantidadPedidosAsignados(int idCadete)
     {
-        int cantidadPedidosAsignados = 0;
-        foreach (var pedido in accesoADatosPedidos.Obtener())
-        {
-            if (pedido.Cadete != null && pedido.Cadete.Id == idCadete)
-            {
-                cantidadPedidosAsignados++;
-            }
-        }
-        return cantidadPedidosAsignados;
+        return accesoADatosPedidos.Obtener().Count(pedido => pedido.Cadete.Id == idCadete);
     }
 
 
@@ -111,15 +100,10 @@ public class Cadeteria
 
     public int CantidadPedidosEntregados(int idCadete)
     {
-        int cantPedidos = 0;
-
-        foreach (var pedido in accesoADatosPedidos.Obtener())
-        {
-            if (pedido.Cadete != null && pedido.Cadete.Id == idCadete && pedido.Estado == EstadoPedido.Entregado)
-            {
-                cantPedidos++;
-            }
-        }
-        return cantPedidos;
+        return accesoADatosPedidos.Obtener().Count(pedido => 
+            pedido.Cadete.Id == idCadete 
+                        && 
+            pedido.Estado == EstadoPedido.Entregado);
     }
+
 }
