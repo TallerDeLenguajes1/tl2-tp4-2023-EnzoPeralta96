@@ -8,30 +8,46 @@ public class Cadeteria
     private string _nombre;
     private double _telefono;
     private List<Cadete> _cadetes;
-    private List<Pedido> _pedidos ;
+    private List<Pedido> _pedidos;
     private AccesoADatosPedidos accesoADatosPedidos;
-    
+    private AccesoADatosCadetes accesoADatosCadetes;
+    private static Cadeteria _cadeteria;
+    public static Cadeteria GetCadeteria()
+    {
+        if (_cadeteria == null)
+        {
+            var AccesoADatosCadeteria = new AccesoADatosCadeteria();
+            _cadeteria = AccesoADatosCadeteria.Obtener();
+            _cadeteria.accesoADatosCadetes = new AccesoADatosCadetes();
+            _cadeteria.accesoADatosPedidos = new AccesoADatosPedidos();
+            _cadeteria.CargarPedidos();
+            _cadeteria.CargarCadetes();
+        }
+        return _cadeteria;
+    }
+
+    private void CargarPedidos()
+    {
+        _pedidos = accesoADatosPedidos.Obtener();
+    }
+
+    private void CargarCadetes()
+    {
+        _cadetes = accesoADatosCadetes.Obtener();
+    }
+
     public string Nombre { get => _nombre; set => _nombre = value; }
     public double Telefono { get => _telefono; set => _telefono = value; }
-    public List<Cadete> Cadetes { get => _cadetes; set => _cadetes = value; }
-    public List<Pedido> Pedidos { get => _pedidos; set => _pedidos = value; }
-    public AccesoADatosPedidos AccesoADatosPedidos { get => accesoADatosPedidos; set => accesoADatosPedidos = value; }
-  
+
+
     public Cadeteria()
     {
         _cadetes = new List<Cadete>();
         _pedidos = new List<Pedido>();
     }
-    public Cadeteria(string nombre, double tel)
-    {
-        Nombre = nombre;
-        Telefono = tel;
-        Pedidos = new List<Pedido>();
-        Cadetes = new List<Cadete>();
-    }
-
+   
     public List<Pedido> GetPedidos()
-    {
+    {   
         return _pedidos;
     }
 
@@ -44,7 +60,7 @@ public class Cadeteria
     {
         _pedidos.Add(nuevoPedido);
         nuevoPedido.NroPedido = _pedidos.Count();
-        AccesoADatosPedidos.Guardar(_pedidos);
+        accesoADatosPedidos.Guardar(_pedidos);
         return nuevoPedido;
     }
 
@@ -55,7 +71,7 @@ public class Cadeteria
         if (pedido != null && cadete != null)
         {
             pedido.Cadete = cadete;
-            AccesoADatosPedidos.Guardar(_pedidos);
+            accesoADatosPedidos.Guardar(_pedidos);
         }
 
         return pedido;
@@ -68,7 +84,7 @@ public class Cadeteria
         if (pedido != null)
         {
             pedido.Estado = (EstadoPedido)NuevoEstado;
-            AccesoADatosPedidos.Guardar(_pedidos);
+            accesoADatosPedidos.Guardar(_pedidos);
         }
         return pedido;
     }
@@ -80,7 +96,7 @@ public class Cadeteria
         if (pedido != null && nuevoCadete != null)
         {
             pedido.Cadete = nuevoCadete;
-            AccesoADatosPedidos.Guardar(_pedidos);
+            accesoADatosPedidos.Guardar(_pedidos);
         }
         return pedido;
     }
@@ -97,11 +113,11 @@ public class Cadeteria
         }
         return cantidadPedidosAsignados;
     }
-  
+
 
     public double JornalACobrar(int idCadete)
     {
-        return CantidadPedidosEntregados(idCadete)*PRECIO_ENVIO;
+        return CantidadPedidosEntregados(idCadete) * PRECIO_ENVIO;
     }
 
     public int CantidadPedidosEntregados(int idCadete)
@@ -110,7 +126,7 @@ public class Cadeteria
 
         foreach (var pedido in _pedidos)
         {
-            if (pedido.Cadete != null && pedido.Cadete.Id == idCadete && pedido.Estado==EstadoPedido.Entregado )
+            if (pedido.Cadete != null && pedido.Cadete.Id == idCadete && pedido.Estado == EstadoPedido.Entregado)
             {
                 cantPedidos++;
             }

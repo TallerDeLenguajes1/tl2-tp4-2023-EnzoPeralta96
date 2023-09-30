@@ -8,22 +8,13 @@ public class CadeteriaController : ControllerBase
 {
    
     private readonly Cadeteria cadeteria;
-
-    private AccesoADatosCadetes accesoADatosCadetes;
-    private AccesoADatosPedidos accesoADatosPedidos;
-    private readonly Informe informe;
     private readonly ILogger<CadeteriaController> _logger;
     
 
     public CadeteriaController(ILogger<CadeteriaController> logger)
     {
         _logger = logger;
-        cadeteria = AccesoADatosCadeteria.Obtener();
-        accesoADatosCadetes = new AccesoADatosCadetes();
-        accesoADatosPedidos = new AccesoADatosPedidos();
-        cadeteria.AccesoADatosPedidos = accesoADatosPedidos;
-        cadeteria.Cadetes = accesoADatosCadetes.Obtener();
-        cadeteria.Pedidos = accesoADatosPedidos.Obtener();
+        cadeteria = Cadeteria.GetCadeteria();
     }
 
     [HttpGet]

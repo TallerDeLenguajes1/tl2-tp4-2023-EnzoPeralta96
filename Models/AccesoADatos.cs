@@ -27,22 +27,15 @@ public static class AccesoADatos
 
 public class AccesoADatosCadeteria
 {
-    private static Cadeteria _cadeteria;
-    public static Cadeteria Obtener()
+    public Cadeteria Obtener()
     {
-        if (_cadeteria == null)
+        Cadeteria cadeteria = null;
+        if (AccesoADatos.ExisteArchivo("DatosJson/cadeteria.json"))
         {
-            if (AccesoADatos.ExisteArchivo("DatosJson/cadeteria.json"))
-            {
-                string TextoJson = File.ReadAllText("DatosJson/cadeteria.json");
-                _cadeteria = JsonSerializer.Deserialize<Cadeteria>(TextoJson);
-            }
-            else
-            {
-                _cadeteria = new Cadeteria("FlasCadeteria", 123456);
-            }
+            string TextoJson = File.ReadAllText("DatosJson/cadeteria.json");
+            cadeteria = JsonSerializer.Deserialize<Cadeteria>(TextoJson);
         }
-        return _cadeteria;
+        return cadeteria;
     }
 }
 

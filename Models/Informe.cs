@@ -27,12 +27,12 @@ public class Informe
     public Informe() => informes = new List<InformeCadete>();
 
 
-    private List<InformeCadete> CargarInforme(Cadeteria cadeteria)
+    private List<InformeCadete> getInforme(Cadeteria cadeteria)
     {
         
         foreach (var cadete in cadeteria.GetCadetes())
         {
-            var InformeIndividual = new InformeCadete
+            var informe = new InformeCadete
             {
                 IdCadete = cadete.Id,
                 NombreCadete = cadete.Nombre,
@@ -41,23 +41,20 @@ public class Informe
                 MontoGanado = cadeteria.JornalACobrar(cadete.Id)
             };
 
-            if (InformeIndividual.CantidadPedidosRecibidos > 0)
+            if (informe.CantidadPedidosRecibidos > 0)
             {
-                InformeIndividual.PromedioPedidosEntregados = InformeIndividual.CantidadPedidosEntregados / InformeIndividual.CantidadPedidosRecibidos;
+                informe.PromedioPedidosEntregados = informe.CantidadPedidosEntregados / informe.CantidadPedidosRecibidos;
             }
-            else
-            {
-                InformeIndividual.CantidadPedidosRecibidos = 0;
-            }
+          
 
-            informes.Add(InformeIndividual);
+            informes.Add(informe);
         }
 
         return informes;
     }
     public string GenerarInformeJson(Cadeteria cadeteria)//consultar si pasar por ref o no
     {
-        var informes = CargarInforme(cadeteria);
+        var informes = getInforme(cadeteria);
         return JsonSerializer.Serialize(informes);
     }
 }

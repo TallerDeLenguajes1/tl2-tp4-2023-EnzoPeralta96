@@ -32,6 +32,7 @@ public class Pedido
         NroPedido = nroPedido;
         ObservacionPedido = observacionPedido;
         Estado =(EstadoPedido)estado;
+        
     }
 
     
