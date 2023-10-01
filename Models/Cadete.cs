@@ -16,7 +16,7 @@ public class Cadete
         this.telefono = telefono;
     }
 
-    public int Id { get => id; }
+    public int Id { get => id; set => id = value;}
     public string Nombre { get => nombre;}
     public string Direccion { get => direccion;}
     public long Telefono { get => telefono;}

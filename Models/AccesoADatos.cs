@@ -56,6 +56,12 @@ public class AccesoADatosCadetes
         return cadetes;
     }
 
+    public void Guardar(List<Cadete> Cadetes)
+    {
+        string formatoJson = JsonSerializer.Serialize(Cadetes);
+        File.WriteAllText(datosCadetes, formatoJson);
+    }
+
 }
 public class AccesoADatosPedidos
 {
