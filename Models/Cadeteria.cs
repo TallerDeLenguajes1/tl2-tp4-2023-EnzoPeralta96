@@ -46,44 +46,45 @@ public class Cadeteria
         accesoADatosPedidos.Guardar(pedidos);
         return nuevoPedido;
     }
-    public Pedido AsignarCadetePedido(int NroPedido, int IdCadete)
+
+    public void GuardarPedidos(List<Pedido> pedidos)
+    {
+        accesoADatosPedidos.Guardar(pedidos);
+    }
+    
+    /*public Pedido AsignarCadetePedido(int NroPedido, int IdCadete) // Tambien sirve para reasignar
     {
         var pedidos = accesoADatosPedidos.Obtener();
         var cadete = accesoADatosCadetes.Obtener().FirstOrDefault(cadete => cadete.Id == IdCadete);
         int indexPedido = pedidos.FindIndex(pedido => pedido.NroPedido == NroPedido);
-        if (indexPedido != -1 && cadete != null)
+
+        if (indexPedido == -1 || cadete == null)
         {
-            pedidos[indexPedido].Cadete = cadete;
-            accesoADatosPedidos.Guardar(pedidos);
+           return null;
         }
+
+        pedidos[indexPedido].Cadete = cadete;
+        accesoADatosPedidos.Guardar(pedidos);
         return pedidos[indexPedido];
-    }
+        
+    }*/
+
 
 
     public Pedido CambiarEstadoPedido(int NroPedido, int NuevoEstado)
     {
         var pedidos = accesoADatosPedidos.Obtener();
         int indexPedido = pedidos.FindIndex(pedido => pedido.NroPedido == NroPedido);
-        if (indexPedido != -1)
+        if (indexPedido == -1)
         {
-            pedidos[indexPedido].Estado = (EstadoPedido)NuevoEstado;
-            accesoADatosPedidos.Guardar(pedidos);
+            return null;    
         }
+        pedidos[indexPedido].Estado = (EstadoPedido)NuevoEstado;
+        accesoADatosPedidos.Guardar(pedidos);
         return pedidos[indexPedido];
     }
 
-    public Pedido CambiarCadetePedido(int NroPedido, int idNuevoCadete)
-    {
-        var pedidos = accesoADatosPedidos.Obtener();
-        var nuevoCadete = accesoADatosCadetes.Obtener().FirstOrDefault(cadete => cadete.Id == idNuevoCadete);
-        var indexPedido = pedidos.FindLastIndex(pedido => pedido.NroPedido == NroPedido);
-        if (indexPedido != -1 && nuevoCadete != null)
-        {
-            pedidos[indexPedido].Cadete = nuevoCadete;
-            accesoADatosPedidos.Guardar(pedidos);
-        }
-        return pedidos[indexPedido];
-    }
+    
     public List<Cadete> GetCadetes()
     {
         return accesoADatosCadetes.Obtener();

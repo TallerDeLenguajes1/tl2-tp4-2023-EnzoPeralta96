@@ -3,7 +3,6 @@ using WebAPI;
 
 public class InformeCadete
 {
-
     int idCadete;
     string nombreCadete;
     private int cantidadPedidosRecibidos;
@@ -45,7 +44,6 @@ public class Informe
             {
                 informe.PromedioPedidosEntregados = informe.CantidadPedidosEntregados / informe.CantidadPedidosRecibidos;
             }
-          
 
             informes.Add(informe);
         }
