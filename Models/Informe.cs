@@ -26,7 +26,7 @@ public class Informe
     public Informe() => informes = new List<InformeCadete>();
 
 
-    private List<InformeCadete> getInforme(Cadeteria cadeteria)
+    public List<InformeCadete> GetInforme(Cadeteria cadeteria)
     {
         
         foreach (var cadete in cadeteria.GetCadetes())
@@ -50,9 +50,5 @@ public class Informe
 
         return informes;
     }
-    public string GenerarInformeJson(Cadeteria cadeteria)//consultar si pasar por ref o no
-    {
-        var informes = getInforme(cadeteria);
-        return JsonSerializer.Serialize(informes);
-    }
+    
 }

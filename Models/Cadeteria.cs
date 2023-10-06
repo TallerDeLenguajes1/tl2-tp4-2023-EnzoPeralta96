@@ -27,9 +27,9 @@ public class Cadeteria
         }
         return _cadeteria;
     }
-   
+
     public List<Pedido> GetPedidos()
-    {   
+    {
         return accesoADatosPedidos.Obtener();
     }
 
@@ -51,40 +51,30 @@ public class Cadeteria
     {
         accesoADatosPedidos.Guardar(pedidos);
     }
-    
-    /*public Pedido AsignarCadetePedido(int NroPedido, int IdCadete) // Tambien sirve para reasignar
+
+    public Pedido AsignarCadetePedido(int NroPedido, int IdCadete) // Tambien sirve para reasignar
     {
         var pedidos = accesoADatosPedidos.Obtener();
-        var cadete = accesoADatosCadetes.Obtener().FirstOrDefault(cadete => cadete.Id == IdCadete);
         int indexPedido = pedidos.FindIndex(pedido => pedido.NroPedido == NroPedido);
-
-        if (indexPedido == -1 || cadete == null)
-        {
-           return null;
-        }
+        var cadete = accesoADatosCadetes.Obtener().FirstOrDefault(cadete => cadete.Id == IdCadete);
 
         pedidos[indexPedido].Cadete = cadete;
         accesoADatosPedidos.Guardar(pedidos);
+
         return pedidos[indexPedido];
-        
-    }*/
-
-
-
-    public Pedido CambiarEstadoPedido(int NroPedido, int NuevoEstado)
+    }
+    public Pedido CambiarEstadoPedido(int NroPedido, EstadoPedido NuevoEstado)
     {
         var pedidos = accesoADatosPedidos.Obtener();
         int indexPedido = pedidos.FindIndex(pedido => pedido.NroPedido == NroPedido);
-        if (indexPedido == -1)
-        {
-            return null;    
-        }
-        pedidos[indexPedido].Estado = (EstadoPedido)NuevoEstado;
+
+        pedidos[indexPedido].Estado = NuevoEstado;
         accesoADatosPedidos.Guardar(pedidos);
+        
         return pedidos[indexPedido];
     }
 
-    
+
     public List<Cadete> GetCadetes()
     {
         return accesoADatosCadetes.Obtener();
@@ -109,9 +99,9 @@ public class Cadeteria
     }
     public int CantidadPedidosEntregados(int idCadete)
     {
-        return accesoADatosPedidos.Obtener().Count(pedido => 
-            pedido.Cadete.Id == idCadete 
-                        && 
+        return accesoADatosPedidos.Obtener().Count(pedido =>
+            pedido.Cadete.Id == idCadete
+                        &&
             pedido.Estado == EstadoPedido.Entregado);
     }
     public double JornalACobrar(int idCadete)

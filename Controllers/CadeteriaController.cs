@@ -57,11 +57,10 @@ public class CadeteriaController : ControllerBase
 
 
     [HttpGet("InformeJornada")]
-    public ActionResult<string> GetInforme()
+    public ActionResult<List<InformeCadete>> GetInforme()
     {
         var informe = new Informe();
-        string informeJson = informe.GenerarInformeJson(cadeteria);
-        return Ok(informeJson);
+        return Ok(informe.GetInforme(cadeteria));
     }
 
     [HttpPost("AgregarPedido")]
@@ -81,46 +80,34 @@ public class CadeteriaController : ControllerBase
     [HttpPut("AsignarCadete")]
     public ActionResult<Pedido> AsignarPedido(int idPedido, int idCadete)
     {
-        var pedidos = cadeteria.GetPedidos();
-        int indexPedido = pedidos.FindIndex(pedido => pedido.NroPedido == idPedido);
-        if (indexPedido == -1)
+        if (cadeteria.GetPedidoXId(idPedido) == null)
         {
             return NotFound("Pedido no encontrado");
         }
-        var cadete = cadeteria.GetCadeteXId(idCadete);
-        if (cadete == null)
+
+        if (cadeteria.GetCadeteXId(idCadete) == null)
         {
             return NotFound("Cadete no encontrado");
         }
-        pedidos[indexPedido].Cadete = cadete;
-        cadeteria.GuardarPedidos(pedidos);
-        return NoContent();
+
+        var pedido = cadeteria.AsignarCadetePedido(idPedido,idCadete);
+
+        return Ok(pedido);
     }
 
     [HttpPut("ActualizarEstadoPedido")]
-    public ActionResult<Pedido> CambiarEstadoPedido(int idPedido, int NuevoEstado)
+    public ActionResult<Pedido> CambiarEstadoPedido(int idPedido, EstadoPedido nuevoEstado)
     {
-        if (NuevoEstado < 0 && NuevoEstado > 3)
-        {
-            return NotFound("Estado invalido");
-        }
-        var pedido = cadeteria.CambiarEstadoPedido(idPedido, NuevoEstado);
-        if (pedido == null)
+        if (cadeteria.GetPedidoXId(idPedido) == null)
         {
             return NotFound("Pedido no encontrado");
         }
-        return NoContent(); // indica operacion exitosa, no muestra el objeto.
+
+        var pedido = cadeteria.CambiarEstadoPedido(idPedido, nuevoEstado);
+
+        return Ok(pedido);
+        
+        //return NoContent(); indica operacion exitosa, no muestra el objeto.
     }
 
-    /*[HttpPut("CambiarCadetePedido")]
-    public ActionResult<Pedido> CambiarCadetePedido(int idPedido, int idCadete)
-    {
-        var pedido = cadeteria.CambiarCadetePedido(idPedido, idCadete);
-        if (pedido == null)
-        {
-            return NotFound("Pedido no encontrado");
-        }
-        return NoContent(); // indica operacion exitosa, no muestra el objeto.
-    } 
-    ESTE METODO HACE LO MISMO QUE REASIGNAR - DUPLICACION DE CODIGO*/
 }
